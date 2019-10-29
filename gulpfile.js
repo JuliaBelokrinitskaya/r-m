@@ -14,7 +14,7 @@ const minifyJs = require(`gulp-terser`);
 const server = require(`browser-sync`).create();
 
 gulp.task(`clean`, function() {
-  return del(`build`);
+  return del([`css`, `js`, `index.html`]);
 });
 
 gulp.task(`style`, function () {
@@ -27,27 +27,27 @@ gulp.task(`style`, function () {
     .pipe(postcss([
       autoprefixer()
     ]))
-    .pipe(gulp.dest(`build/css`))
+    .pipe(gulp.dest(`css`))
     .pipe(minify())
     .pipe(rename(`style.min.css`))
-    .pipe(gulp.dest(`build/css`))
+    .pipe(gulp.dest(`css`))
     .pipe(server.stream());
 });
 
 gulp.task(`scripts`, function() {
   return gulp.src(`src/js/script.js`)
   .pipe(plumber())
-  .pipe(gulp.dest(`build/js`))
+  .pipe(gulp.dest(`js`))
   .pipe(minifyJs())
   .pipe(rename({
     suffix: `.min`
   }))
-  .pipe(gulp.dest(`build/js`));
+  .pipe(gulp.dest(`js`));
 });
 
 gulp.task(`html`, function () {
   return gulp.src(`src/*.html`)
-    .pipe(gulp.dest(`build`));
+    .pipe(gulp.dest(`./`));
 });
 
 gulp.task(`refresh`, function (done) {
@@ -64,7 +64,7 @@ gulp.task(`build`, gulp.series(
 
 gulp.task(`serve`, function () {
   server.init({
-    server: `build/`,
+    server: `./`,
     notify: false,
     open: true,
     cors: true,
